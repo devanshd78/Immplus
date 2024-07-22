@@ -1,54 +1,98 @@
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import React, { useState, useEffect, useCallback }  from 'react';
+import { View, Text, StyleSheet, Image, ActivityIndicator, FlatList  } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function MyAppointmentsScreen(){
+export default function MyAppointmentsScreen() {
+  const [appointments, setAppointments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [UserId, setUserId] = useState(null);
 
   const navigation = useNavigation();
+
+  useEffect(() => {
+    const fetchAppointments = async () => {
+      try {
+        const response = await axios.get(`https://immuneapi-production.up.railway.app/users/appointment`, {
+          params: { userid: UserId }
+        });
+        setAppointments(response.data);
+      } catch (error) {
+        console.error('Error fetching appointments:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    const getUserId = async () => {
+      const userId = await AsyncStorage.getItem('UserId');
+      setUserId(userId);
+    };
+
+    getUserId();
+    fetchAppointments();
+  }, []);
+
+  const renderAppointment = ({ item }) => (
+    <View style={styles.contentWrapper}>
+      <Text style={{ marginBottom: 5 }}>{item.date}</Text>
+      <View style={styles.content}>
+        <View style={styles.infoContainer}>
+          <Image source={{ uri: item.doctorImage }} style={styles.doctorImage} />
+          <View style={styles.textContainer}>
+            <Text style={styles.doctorName}>{item.doctorName}</Text>
+            <Text style={styles.speciality}>Speciality: {item.speciality}</Text>
+            <View style={styles.tabContainer}>
+              <Text style={styles.tabText}>{item.tab}</Text>
+            </View>
+          </View>
+        </View>
+        <View style={styles.videoConsultancyContainer}>
+          <MaterialIcons name="videocam" size={18} color="#5C9A41" />
+          <Text style={styles.videoConsultancy}>Video Consultancy</Text>
+        </View>
+        <View style={styles.additionalInfoContainer}>
+          <View style={styles.appointmentContainer}>
+            <View style={styles.iconContainer}>
+              <MaterialIcons name="date-range" size={18} color="#555555" />
+            </View>
+            <Text style={styles.appointmentText}>{item.date}</Text>
+          </View>
+          <View style={styles.appointmentContainer}>
+            <View style={styles.iconContainer}>
+              <MaterialIcons name="timer" size={18} color="#555555" />
+            </View>
+            <Text style={styles.appointmentText}>{item.time}</Text>
+          </View>
+        </View>
+        <View style={styles.locationContainer}>
+          <MaterialIcons name="location-on" size={18} color="#555555" />
+          <Text style={styles.locationText}>{item.location}</Text>
+        </View>
+      </View>
+    </View>
+  );
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#5C9A41" />
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
       <View style={styles.headlineContainer}>
         <Text style={styles.headline}>My Appointments</Text>
       </View>
-      <View style={styles.contentWrapper}>
-        <Text style={{marginBottom:5}}>27 Feb 2024</Text>
-        <View style={styles.content}>
-          <View style={styles.infoContainer}>
-            <Image source={require('./assets/img/docter-home.png')} style={styles.doctorImage} />
-            <View style={styles.textContainer}>
-              <Text style={styles.doctorName}>Dr. John Doe</Text>
-              <Text style={styles.speciality}>Speciality: General Physician</Text>
-              <View style={styles.tabContainer}>
-                <Text style={styles.tabText}>Ayurvedic</Text>
-              </View>
-            </View>
-          </View>
-          <View style={styles.videoConsultancyContainer}>
-            <MaterialIcons name="videocam" size={18} color="#5C9A41" />
-            <Text style={styles.videoConsultancy}>Video Consultancy</Text>
-          </View>
-          <View style={styles.additionalInfoContainer}>
-            <View style={styles.appointmentContainer}>
-              <View style={styles.iconContainer}>
-                <MaterialIcons name="date-range" size={18} color="#555555" />
-              </View>
-              <Text style={styles.appointmentText}>Wed, 27th Feb 2024</Text>
-            </View>
-            <View style={styles.appointmentContainer}>
-              <View style={styles.iconContainer}>
-                <MaterialIcons name="timer" size={18} color="#555555" />
-              </View>
-              <Text style={styles.appointmentText}>17:00 - 17:30</Text>
-            </View>
-          </View>
-          <View style={styles.locationContainer}>
-            <MaterialIcons name="location-on" size={18} color="#555555" />
-            <Text style={styles.locationText}>1234 Example St, City, Country</Text>
-          </View>
-        </View>
-      </View>
+      <FlatList
+        data={appointments}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={renderAppointment}
+        contentContainerStyle={styles.flatListContent}
+      />
     </View>
   );
 };
@@ -129,7 +173,6 @@ const styles = StyleSheet.create({
     color: '#555555',
     marginLeft: 10,
   },
-
   appointmentContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -151,5 +194,13 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     fontSize: 12,
     color: '#555555',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  flatListContent: {
+    paddingBottom: 20,
   },
 });

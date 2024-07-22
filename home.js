@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { AppRegistry, Platform, RefreshControl  } from 'react-native';
+import { AppRegistry, Platform, RefreshControl } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Picker, TouchableOpacity, ScrollView, Image, SafeAreaView, Dimensions, useWindowDimensions, Button } from 'react-native';
 import styles from './style';
@@ -22,9 +22,10 @@ export default function Home() {
   const widthPadding = windowWidth - 40
   const BannerSize = width * 0.8
   const [bannerData, setBannerData] = useState([]);
+  const [images, setImages] = useState([]);
+  const [topRatedDoctors, setTopRatedDoctors] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const categoryData = [{ name: 'Top Products', image: require('./assets/img/category-1.png') }, { name: 'Health Care', image: require('./assets/img/category-2.png') }, { name: 'Elderly Care', image: require('./assets/img/category-3.png') }, { name: 'Child Care', image: require('./assets/img/category-4.png') }, { name: 'Top Products', image: require('./assets/img/category-1.png') }, { name: 'Health Care', image: require('./assets/img/category-2.png') }, { name: 'Elderly Care', image: require('./assets/img/category-3.png') }, { name: 'Child Care', image: require('./assets/img/category-4.png') }]
-  const docterData = [{ name: 'Dr. Raja Ravish Kumar', type: 1, description: 'PHD · Kidney Specialist', exp: '5 +', rating: '4.5', review: '2101', img: require('./assets/img/dummy-pic.jpg') }, { name: 'Dr. Raja Ravish Kumar', type: 2, description: 'PHD · Kidney Specialist', exp: '5 +', rating: '4.5', review: '2101', img: require('./assets/img/dummy-pic.jpg') }, { name: 'Dr. Raja Ravish Kumar', type: 3, description: 'PHD · Kidney Specialist', exp: '5 +', rating: '4.5', review: '2101', img: require('./assets/img/dummy-pic.jpg') }]
 
   const handleTabPress = (tabNumber) => {
     setSelectedTab(tabNumber);
@@ -36,30 +37,32 @@ export default function Home() {
     try {
       const response = await axios.get('https://immuneapi-production.up.railway.app/userReviewPoster/records');
       setBannerData(response.data);
+      setImages(response.data)
     } catch (error) {
       console.error('Error fetching banner data:', error);
-    }  
-  };
+    }
+  }
+
+  const fetchTopRatedDoctors = async () => {
+    try {
+      const response = await axios.get('https://immuneapi-production.up.railway.app/docter/topRated');
+      setTopRatedDoctors(response.data);
+    } catch (error) {
+      console.error('Error fetching top-rated doctors:', error);
+    }
+  }
 
   useEffect(() => {
     fetchBannerData();
+    fetchTopRatedDoctors();
   }, []);
 
   const onRefresh = () => {
     setRefreshing(true);
-    fetchBannerData().finally(() => {
+    Promise.all([fetchBannerData(), fetchTopRatedDoctors()]).finally(() => {
       setRefreshing(false);
     });
   };
-
-  const images = [
-    require('./assets/img/banner-pic-1.png'),
-    require('./assets/img/category-1.png'),
-    require('./assets/img/category-1.png'),
-    require('./assets/img/category-1.png'),
-    require('./assets/img/category-1.png'),
-  ];
-
 
   return (
     <>
@@ -67,8 +70,8 @@ export default function Home() {
         <StatusBar barStyle="light-content" backgroundColor="#ffffff" />
         <SafeAreaView>
           <ScrollView contentContainerStyle={[styles.scrollViewContent, { backgroundColor: '#ffffff' }]} animated={true} refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            } >
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          } >
             <View style={[styles.flexRow, styles.justifyContentBetween, styles.paddingHor20]}>
               <View style={[styles.flexRow, styles.locationCon, styles.alignItemsCenter]}>
                 <View style={styles.greenCon}>
@@ -224,7 +227,7 @@ export default function Home() {
                     <View key={index} style={[styles.bannerWrapper, { marginLeft: index === 0 ? 20 : 0, marginRight: 20 }]}>
                       <View style={styles.imageContainer}>
                         <Image
-                          source={{ uri: item.image }}
+                          source={{ uri: `https://immuneapi-production.up.railway.app/${item.img}` }}
                           style={styles.banner}
                         />
                       </View>
@@ -267,12 +270,9 @@ export default function Home() {
 
               <View style={[styles.alignItemsCenter, { backgroundColor: '#000000', }]}>
                 <View style={[styles.categoryCon, styles.flexRow, { paddingHorizontal: 20, flexWrap: 'wrap', justifyContent: 'space-evenly', gap: 10, borderBottomEndRadius: 40, borderBottomLeftRadius: 40, backgroundColor: '#ffffff', paddingBottom: 30 }]}>
-                  {docterData.map((item, index) => {
-                    return (
-                      <DocterCard name={item.name} type={item.type} description={item.description} exp={item.exp} rating={item.rating} review={item.review} img={item.img} />
-                    )
-                  })}
-
+                  {topRatedDoctors.map((doctor, index) => (
+                    <DocterCard key={index} name={doctor.name} type={doctor.type} description={doctor.description} exp={doctor.experience} rating={doctor.rating} review={doctor.review} img={{ uri: doctor.img }} />
+                  ))}
                 </View>
                 <View style={[styles.flexRow, styles.justifyContentBetween, { paddingTop: 30, width: widthPadding }]}>
                   <View style={{}}>
@@ -284,7 +284,11 @@ export default function Home() {
                   </View>
                   <Image source={require('./assets/img/star-review-decor.png')} style={styles.startBg} />
                 </View>
-                <Slideshow images={images} slideInterval={3000} />
+                {bannerData.length > 0 ? (
+                  <Slideshow images={images} slideInterval={3000} />
+                ) : (
+                  <Text>No banners available</Text>
+                )}
 
               </View>
 

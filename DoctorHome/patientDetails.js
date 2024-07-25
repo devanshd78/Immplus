@@ -8,7 +8,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6'
 import Feather from 'react-native-vector-icons/Feather'
 import Fontisto from 'react-native-vector-icons/Fontisto'
-import GradientButton from './assets/component/GradientButton';
+import GradientButton from '../assets/component/GradientButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';

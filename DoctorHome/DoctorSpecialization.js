@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, Dimensions, ScrollView, Alert, TouchableOpacity } from 'react-native';
-import GradientButton from './assets/component/GradientButton'
+import GradientButton from '../assets/component/GradientButton'
 import { Ionicons } from '@expo/vector-icons';
-import SearchBox from './assets/component/Search'
+import SearchBox from '../assets/component/Search'
 import { useNavigation } from '@react-navigation/native';
 
 const windowWidth = Dimensions.get('window').width;

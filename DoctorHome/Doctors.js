@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, ScrollView } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import GradientButton from './assets/component/GradientButton.js';
+import GradientButton from '../assets/component/GradientButton.js';
 import { useNavigation } from '@react-navigation/native';
-import DocterCard from './assets/component/docter-card-long';
+import DocterCard from '../assets/component/docter-card-long.js';
 import axios from 'axios';
 import { RefreshControl } from 'react-native-gesture-handler';
 

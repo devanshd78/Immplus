@@ -1,12 +1,12 @@
 import React, { useState, useCallback } from 'react';
 import { View, StyleSheet, Text, BackHandler } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import DateComponent from './assets/component/Calender.js';
-import TimeSlot from './assets/component/TimeSlot.js';
+import DateComponent from '../assets/component/Calender.js';
+import TimeSlot from '../assets/component/TimeSlot.js';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import GradientButton from './assets/component/GradientButton.js';
+import GradientButton from '../assets/component/GradientButton.js';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import styles from './style2.js';
+import styles from '../style2.js';
 
 const DateTime = () => {
     const navigation = useNavigation();

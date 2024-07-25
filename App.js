@@ -6,6 +6,7 @@ import React from "react";
 
 import LoginComponent from "./login";
 
+//onboarding
 import TypeOfAccount from "./onBoarding/typeOfAccount";
 import Gender from "./onBoarding/gender";
 import AgeGroup from "./onBoarding/ageGroup";
@@ -14,21 +15,28 @@ import PerosnalInfo from "./onBoarding/personalInfo";
 // import Location from './onBoarding/location';
 
 import Home from "./home";
-import DocterDesc from "./docterDesc";
-import PharmacyHome from "./pharmacyHome";
-import PharmaDesc from "./pharmacyDesc";
-import LabTestHome from "./labTestHome";
-import LabTestDesc from "./labTestDesc";
-import FindDocter from "./findDocter";
-import TreatmentType from "./treatmentType";
-import DocterSpecialization from "./DoctorSpecialization";
-import PatientDetailsScreen from "./patientDetails";
-import PaymentDetailsScreen from "./Payment";
+
+//Doctor
+import DocterDesc from "./DoctorHome/docterDesc";
+import Doctors from "./DoctorHome/Doctors";
+import FindDocter from "./DoctorHome/findDocter";
+import DocterSpecialization from "./DoctorHome/DoctorSpecialization";
+import TreatmentType from "./DoctorHome/treatmentType";
+import PatientDetailsScreen from "./DoctorHome/patientDetails";
+import PaymentDetailsScreen from "./DoctorHome/Payment";
+import DateTime from "./DoctorHome/DateTime";
+import MyAppointmentsScreen from "./DoctorHome/MyAppointment";
+
+//Pharmacy
+import PharmacyHome from "./MedicalHome/pharmacyHome";
+import PharmaDesc from "./MedicalHome/pharmacyDesc";
+
+//LabTest
+import LabTestHome from "./LabTest/labTestHome";
+import LabTestDesc from "./LabTest/labTestDesc";
+
 import { name as appName } from "./app.json";
 import DateComponent from "./assets/component/Calender";
-import DateTime from "./DateTime";
-import Doctors from "./Doctors";
-import MyAppointmentsScreen from "./MyAppointment";
 
 const Stack = createStackNavigator();
 AppRegistry.registerComponent(appName, () => App);

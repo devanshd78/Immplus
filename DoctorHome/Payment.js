@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import GradientButton from './assets/component/GradientButton';
+import GradientButton from '../assets/component/GradientButton';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -136,28 +136,28 @@ export default function PaymentDetailsScreen() {
       <View style={styles.contentWrapper}>
         <View style={styles.content}>
           <View style={styles.infoContainer}>
-            <Image source={require('./assets/img/docter-home.png')} style={styles.doctorImage} />
+            <Image source={require('../assets/img/docter-home.png')} style={styles.doctorImage} />
             <View style={styles.textContainer}>
               <Text style={styles.doctorName}>{doctorInfo.name}</Text>
               <Text style={styles.speciality}>Speciality: {doctorInfo.speciality}</Text>
               <View style={{ flexDirection: 'row', gap: 5, marginTop: 10 }}>
                 {doctorInfo.consultancyType === 1 && (
                   <View style={[styles.typeCon, { backgroundColor: '#FFC3EE' }]}>
-                    <Image source={require('./assets/img/homeopathy-sec.png')} style={styles.typeImg} />
+                    <Image source={require('../assets/img/homeopathy-sec.png')} style={styles.typeImg} />
                     <Text style={[styles.typeText, { color: '#C2008C' }]}>Homeopathy</Text>
                   </View>
                 )}
 
                 {doctorInfo.consultancyType === 2 && (
                   <View style={[styles.typeCon, { backgroundColor: '#C3CCFF' }]}>
-                    <Image source={require('./assets/img/allopathy-sec.png')} style={styles.typeImg} />
+                    <Image source={require('../assets/img/allopathy-sec.png')} style={styles.typeImg} />
                     <Text style={[styles.typeText, { color: '#0036C2' }]}>Allopathy</Text>
                   </View>
                 )}
 
                 {doctorInfo.consultancyType === 3 && (
                   <View style={[styles.typeCon, { backgroundColor: '#7ED95720' }]}>
-                    <Image source={require('./assets/img/ayurveda-sec.png')} style={styles.typeImg} />
+                    <Image source={require('../assets/img/ayurveda-sec.png')} style={styles.typeImg} />
                     <Text style={[styles.typeText, { color: '#7ED957' }]}>Ayurvedic</Text>
                   </View>
                 )}

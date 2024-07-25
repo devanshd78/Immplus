@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Text, View, TouchableOpacity, ActivityIndicator  } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import styles from './style2';
+import styles from '../style2';
 import { LinearGradient } from 'expo-linear-gradient';
 import Fontisto from 'react-native-vector-icons/Fontisto'
 import axios from 'axios';

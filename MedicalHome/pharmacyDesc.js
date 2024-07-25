@@ -3,12 +3,12 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image, SafeAreaView, Dimensions, useWindowDimensions, RefreshControl } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import PharmaProduct from './assets/component/pharma-productcard';
-import styles from './style';
+import PharmaProduct from '../assets/component/pharma-productcard';
+import styles from '../style';
 import { useNavigation } from '@react-navigation/native';
-import DocterCard from './assets/component/docter-card';
-import DocterSlider from './assets/component/docter-slider';
-import CommentCard from './assets/component/comments-cards';
+import DocterCard from '../assets/component/docter-card';
+import DocterSlider from '../assets/component/docter-slider';
+import CommentCard from '../assets/component/comments-cards';
 import axios from 'axios';
 
 const pharmaData = [{ id: "1", name: "Evergreen Pharmacy", price: "100", accPrice: "150", time: "15" }];
@@ -145,7 +145,7 @@ export default function PharmaDesc() {
                     <ScrollView contentContainerStyle={[styles.scrollViewContent, { paddingBottom: 100 }]} animated={true} showsVerticalScrollIndicator={false} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} >
                         <View style={[styles.headerCon, { padding: widthPadding }]}>
                             <TouchableOpacity style={styles.backBtnCon} onPress={() => navigation.navigate('pharmacy')}>
-                                <Image source={require('./assets/img/back-Btn.png')} style={styles.backBtn} />
+                                <Image source={require('../assets/img/back-Btn.png')} style={styles.backBtn} />
                             </TouchableOpacity>
                             <Text style={styles.headerText}>Products Details</Text>
                         </View>
@@ -162,11 +162,11 @@ export default function PharmaDesc() {
                                     </View>
                                     <View style={[styles.flexRow, { alignItems: 'center', gap: 6 }]}>
                                         <TouchableOpacity onPress={handleMinus}>
-                                            <Image source={require('./assets/img/minus-orange-btn.png')} style={styles.mediumIcon} />
+                                            <Image source={require('../assets/img/minus-orange-btn.png')} style={styles.mediumIcon} />
                                         </TouchableOpacity>
                                         <Text style={[styles.bigBoldHeading, { fontSize: 18, fontWeight: "700", paddingHorizontal: 10 }]}>{quantity}</Text>
                                         <TouchableOpacity onPress={handleAdd}>
-                                            <Image source={require('./assets/img/add-orange-btn.png')} style={styles.mediumIcon} />
+                                            <Image source={require('../assets/img/add-orange-btn.png')} style={styles.mediumIcon} />
                                         </TouchableOpacity>
                                     </View>
                                 </View>
@@ -217,7 +217,7 @@ export default function PharmaDesc() {
                         <View style={{ alignItems: 'center' }}>
                             <View style={{ width: widthPadding }}>
                                 <View style={[styles.flexRow, styles.alignItemsCenter]}>
-                                    <Image source={require('./assets/img/pharma-sign-green.png')} style={styles.mediumIcon} />
+                                    <Image source={require('../assets/img/pharma-sign-green.png')} style={styles.mediumIcon} />
                                     <Text style={[styles.heading, { paddingLeft: 8, color: '#2F551F' }]}>Near By Pharmacy</Text>
                                 </View>
 
@@ -244,7 +244,7 @@ export default function PharmaDesc() {
                                                 <Text style={[styles.bigBoldHeading, { fontSize: 14, fontWeight: "700" }]}>{item.time} min</Text>
                                             </View>
                                             <View style={[styles.flexRow, { justifyContent: 'center', gap: 6 }]}>
-                                                <Image source={require("./assets/img/delivery-icon-orange.png")} style={{ width: 20, resizeMode: 'contain', height: 20 }} />
+                                                <Image source={require("../assets/img/delivery-icon-orange.png")} style={{ width: 20, resizeMode: 'contain', height: 20 }} />
                                                 <Text style={[styles.bigBoldHeading, { fontSize: 12, fontWeight: "400" }]}>Free Delivery</Text>
                                             </View>
                                         </View>

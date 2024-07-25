@@ -1,30 +1,30 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Picker, TouchableOpacity, ScrollView, Image, SafeAreaView, Dimensions, useWindowDimensions, Button, TextInput, RefreshControl } from 'react-native';
-import styles from './style';
+import styles from '../style';
 import { LinearGradient } from 'expo-linear-gradient';
-import PharmaProduct from './assets/component/pharma-productcard';
+import PharmaProduct from '../assets/component/pharma-productcard';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 
 
 const images = [
-    require('./assets/img/banner-pic-1.png'),
-    require('./assets/img/category-1.png'),
-    require('./assets/img/category-2.png'),
-    require('./assets/img/category-3.png'),
-    require('./assets/img/category-4.png'),
+    require('../assets/img/banner-pic-1.png'),
+    require('../assets/img/category-1.png'),
+    require('../assets/img/category-2.png'),
+    require('../assets/img/category-3.png'),
+    require('../assets/img/category-4.png'),
 ];
 
 const productBanner = [
-    require('./assets/img/pharmacy-product-banner-1.png'),
-    require('./assets/img/pharmacy-product-banner-1.png'),
-    require('./assets/img/pharmacy-product-banner-1.png'),
-    require('./assets/img/pharmacy-product-banner-1.png'),
-    require('./assets/img/pharmacy-product-banner-2.png'),
-    require('./assets/img/pharmacy-product-banner-2.png'),
-    require('./assets/img/pharmacy-product-banner-2.png'),
-    require('./assets/img/pharmacy-product-banner-2.png'),
+    require('../assets/img/pharmacy-product-banner-1.png'),
+    require('../assets/img/pharmacy-product-banner-1.png'),
+    require('../assets/img/pharmacy-product-banner-1.png'),
+    require('../assets/img/pharmacy-product-banner-1.png'),
+    require('../assets/img/pharmacy-product-banner-2.png'),
+    require('../assets/img/pharmacy-product-banner-2.png'),
+    require('../assets/img/pharmacy-product-banner-2.png'),
+    require('../assets/img/pharmacy-product-banner-2.png'),
 ];
 
 export default function PharmacyHome() {
@@ -35,7 +35,7 @@ export default function PharmacyHome() {
     const widthPadding = windowWidth - 40
     const BannerSize = width * 0.8;
     const [search, setSearch] = useState('');
-    const bannerData = [{ image: require('./assets/img/banner-pic-1.png') }, { image: require('./assets/img/banner-pic-1.png') }, { image: require('./assets/img/banner-pic-1.png') }]
+    const bannerData = [{ image: require('../assets/img/banner-pic-1.png') }, { image: require('../assets/img/banner-pic-1.png') }, { image: require('../assets/img/banner-pic-1.png') }]
     const [products, setProducts] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
     const navigation = useNavigation();
@@ -78,7 +78,7 @@ export default function PharmacyHome() {
                             </View>
 
                             <TouchableOpacity style={styles.greyRoundCon}>
-                                <Image source={require('./assets/img/wallet-green.png')} style={styles.mediumIcon} />
+                                <Image source={require('../assets/img/wallet-green.png')} style={styles.mediumIcon} />
                             </TouchableOpacity>
 
                         </View>
@@ -102,7 +102,7 @@ export default function PharmacyHome() {
 
                         <View style={[{ width: widthPadding, marginTop: 20, alignSelf: 'center' }]}>
                             <View style={styles.searchCon}>
-                                <Image source={require('./assets/img/search-grey.png')} style={styles.mediumIcon} />
+                                <Image source={require('../assets/img/search-grey.png')} style={styles.mediumIcon} />
                                 <TextInput
                                     style={styles.searchInput}
                                     onChangeText={setSearch}
@@ -185,7 +185,7 @@ export default function PharmacyHome() {
                             })}
                         </ScrollView>
 
-                        <Image source={require('./assets/img/get-help-banner.png')} style={[styles.greenHelpBanner, { width: widthPadding }]} />
+                        <Image source={require('../assets/img/get-help-banner.png')} style={[styles.greenHelpBanner, { width: widthPadding }]} />
 
                         <Text style={[styles.heading, { paddingLeft: 0, marginBottom: 10, width: widthPadding }]}>HealthCare Products</Text>
 

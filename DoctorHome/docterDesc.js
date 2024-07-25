@@ -1,19 +1,19 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Picker, TouchableOpacity, ScrollView, Image, SafeAreaView, Dimensions } from 'react-native';
-import styles from './style';
+import styles from '../style';
 import { LinearGradient } from 'expo-linear-gradient';
-import DocterCard from './assets/component/docter-card';
-import DocterSlider from './assets/component/docter-slider';
-import CommentCard from './assets/component/comments-cards';
+import DocterCard from '../assets/component/docter-card';
+import DocterSlider from '../assets/component/docter-slider';
+import CommentCard from '../assets/component/comments-cards';
 import axios from 'axios';
 
 const images = [
-    require('./assets/img/banner-pic-1.png'),
-    require('./assets/img/category-1.png'),
-    require('./assets/img/category-2.png'),
-    require('./assets/img/category-3.png'),
-    require('./assets/img/category-4.png'),
+    require('../assets/img/banner-pic-1.png'),
+    require('../assets/img/category-1.png'),
+    require('../assets/img/category-2.png'),
+    require('../assets/img/category-3.png'),
+    require('../assets/img/category-4.png'),
 ];
 
 export default function DocterDesc() {
@@ -50,7 +50,7 @@ export default function DocterDesc() {
                     <ScrollView contentContainerStyle={[styles.scrollViewContent]} animated={true} showsVerticalScrollIndicator={false}>
                         <View style={[styles.headerCon, { padding: widthPadding }]}>
                             <TouchableOpacity style={styles.backBtnCon}>
-                                <Image source={require('./assets/img/back-Btn.png')} style={styles.backBtn} />
+                                <Image source={require('../assets/img/back-Btn.png')} style={styles.backBtn} />
                             </TouchableOpacity>
                             <Text style={styles.headerText}>Doctor Details</Text>
                         </View>
@@ -61,7 +61,7 @@ export default function DocterDesc() {
                                 <Text style={styles.bigBoldHeading}>Dr. Raja Ravish Kumar</Text>
                                 <Text style={styles.secondaryHeading}>Kidney Specialist</Text>
                                 <View style={[styles.flexRow, { gap: 6, marginTop: 4 }]}>
-                                    <Image source={require('./assets/img/hospital-grey.png')} style={styles.smallIcon} />
+                                    <Image source={require('../assets/img/hospital-grey.png')} style={styles.smallIcon} />
                                     <Text style={styles.bigGreyText}>Kalesh Hospital</Text>
                                 </View>
 
@@ -69,7 +69,7 @@ export default function DocterDesc() {
                                 <View style={[styles.flexRow, styles.justifyContentBetween, { marginTop: 20, paddingHorizontal: 10 }]}>
                                     <View style={{ alignItems: 'center' }}>
                                         <View style={styles.greenRoundCon}>
-                                            <Image source={require('./assets/img/allopathy-green.png')} style={styles.mediumIcon} />
+                                            <Image source={require('../assets/img/allopathy-green.png')} style={styles.mediumIcon} />
                                         </View>
                                         <Text style={styles.tabText}>Allopathy</Text>
                                         <Text style={styles.shadowSubHeading}>Doctor</Text>
@@ -77,7 +77,7 @@ export default function DocterDesc() {
 
                                     <View style={{ alignItems: 'center' }}>
                                         <View style={styles.greenRoundCon}>
-                                            <Image source={require('./assets/img/patient-green.png')} style={styles.mediumIcon} />
+                                            <Image source={require('../assets/img/patient-green.png')} style={styles.mediumIcon} />
                                         </View>
                                         <Text style={styles.tabText}>8000+</Text>
                                         <Text style={styles.shadowSubHeading}>Patients</Text>
@@ -85,7 +85,7 @@ export default function DocterDesc() {
 
                                     <View style={{ alignItems: 'center' }}>
                                         <View style={styles.greenRoundCon}>
-                                            <Image source={require('./assets/img/exprience-green.png')} style={styles.mediumIcon} />
+                                            <Image source={require('../assets/img/exprience-green.png')} style={styles.mediumIcon} />
                                         </View>
                                         <Text style={styles.tabText}>5+</Text>
                                         <Text style={styles.shadowSubHeading}>Experience</Text>
@@ -93,7 +93,7 @@ export default function DocterDesc() {
 
                                     <View style={{ alignItems: 'center' }}>
                                         <View style={styles.greenRoundCon}>
-                                            <Image source={require('./assets/img/rating-green.png')} style={styles.mediumIcon} />
+                                            <Image source={require('../assets/img/rating-green.png')} style={styles.mediumIcon} />
                                         </View>
                                         <Text style={styles.tabText}>4.5</Text>
                                         <Text style={styles.shadowSubHeading}>Rating</Text>

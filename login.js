@@ -1,17 +1,27 @@
 import { useNavigation, CommonActions } from '@react-navigation/native';
-import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Image, StyleSheet, Dimensions, Platform, TouchableOpacity, Alert, Keyboard, ActivityIndicator } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, TextInput, Image,Button, StyleSheet, Dimensions, Platform, TouchableOpacity, Alert, Keyboard, ActivityIndicator } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import GradientButton from './assets/component/GradientButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import * as Notifications from 'expo-notifications';
+import { schedulePushNotification, registerForPushNotificationsAsync } from './utils/notifications';
 
 //import styles from './style2';
 //import styles from './style';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
+
+Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: false,
+      shouldSetBadge: false,
+    }),
+  });
 
 const styles = StyleSheet.create({
     container: {
@@ -167,6 +177,36 @@ export default function LoginComponent() {
         );
       };
 
+      const [expoPushToken, setExpoPushToken] = useState('');
+      const [channels, setChannels] = useState([]);
+      const [notification, setNotification] = useState(
+        undefined
+      );
+      const notificationListener = useRef();
+      const responseListener = useRef();
+    
+      useEffect(() => {
+        registerForPushNotificationsAsync().then(token => token && setExpoPushToken(token));
+    
+        if (Platform.OS === 'android') {
+          Notifications.getNotificationChannelsAsync().then(value => setChannels(value ?? []));
+        }
+        notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+          setNotification(notification);
+        });
+    
+        responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+          console.log(response);
+        });
+    
+        return () => {
+          notificationListener.current &&
+            Notifications.removeNotificationSubscription(notificationListener.current);
+          responseListener.current &&
+            Notifications.removeNotificationSubscription(responseListener.current);
+        };
+      }, []);
+
     useEffect(() => {
       const keyboardDidShowListener = Keyboard.addListener(
         "keyboardDidShow",
@@ -248,6 +288,12 @@ export default function LoginComponent() {
                     </TouchableOpacity>
                 </Text>
             </View>
+            <Button
+        title="Schedule Notification"
+        onPress={async () => {
+          await schedulePushNotification("dummy", "dummy",{ data: 'goes here', test: { test1: 'more data' } });
+        }}
+      />
             <View style={styles.buttonContainer}>
                 <GradientButton onPress={handleLoginPress} buttonText="Login" />
             </View>

@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "newImmune",
-    "slug": "newImmune",
+    "slug": "immplus",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -22,6 +22,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "b2763954-4878-4fe6-a91a-5fff4681ac29"
+      }
+    },
+    "owner": "risxbhh"
   }
 }

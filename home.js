@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { AppRegistry, Platform, RefreshControl } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, Text, View, Picker, TouchableOpacity, ScrollView, Image, SafeAreaView, Dimensions, useWindowDimensions, Button } from 'react-native';
 import styles from './style';
 import { Animated, useSharedValue, useAnimationStyle, useAnimationScrollHandler, interpolate } from 'react-native-reanimated';
@@ -11,6 +11,10 @@ import DocterCard from './assets/component/docter-card';
 import Slideshow from './assets/component/slideshow';
 import LightGreenCard from './assets/component/lightGreen-card';
 import axios from 'axios';
+import { io } from 'socket.io-client';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const SOCKET_SERVER_URL = "https://immuneapi-production.up.railway.app"
 
 AppRegistry.registerComponent('main', () => App);
 export default function Home() {
@@ -25,13 +29,71 @@ export default function Home() {
   const [images, setImages] = useState([]);
   const [topRatedDoctors, setTopRatedDoctors] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [UserId, setUserId] = useState(null);
   const categoryData = [{ name: 'Top Products', image: require('./assets/img/category-1.png') }, { name: 'Health Care', image: require('./assets/img/category-2.png') }, { name: 'Elderly Care', image: require('./assets/img/category-3.png') }, { name: 'Child Care', image: require('./assets/img/category-4.png') }, { name: 'Top Products', image: require('./assets/img/category-1.png') }, { name: 'Health Care', image: require('./assets/img/category-2.png') }, { name: 'Elderly Care', image: require('./assets/img/category-3.png') }, { name: 'Child Care', image: require('./assets/img/category-4.png') }]
+  const socketRef = useRef(null);
 
   const handleTabPress = (tabNumber) => {
     setSelectedTab(tabNumber);
   };
 
   const navigation = useNavigation();
+
+  useEffect(() => {
+    if (!socketRef.current) {
+      socketRef.current = io('https://immuneapi-production.up.railway.app');
+
+      socketRef.current.on('newOrder', async (order) => {
+        if (order) {
+          console.log(order);
+          // setOrderId(order.orderId); // Uncomment if you need to set the orderId
+          // await fetchOrder(); // Uncomment if you have a fetchOrder function
+          // playNotificationSound(); // Uncomment if you have a playNotificationSound function
+        } else {
+          console.error('Invalid order data:', order);
+        }
+      });
+
+      socketRef.current.on('orderStatusChanged', async (order) => {
+        await getNotificationById();
+      });
+
+      socketRef.current.on('orderConfirmed', async (order) => {
+        if (order) {
+
+          //setOrderId(order.orderId);
+          // await fetchOngoingOrder(); // Uncomment if you have a fetchOngoingOrder function
+        } else {
+          console.error('Invalid order data:', order);
+        }
+      });
+    }
+
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.off('newOrder');
+        socketRef.current.off('orderConfirmed');
+        socketRef.current.off('orderStatusChanged');
+        socketRef.current.disconnect(); // Disconnect WebSocket on cleanup
+        socketRef.current = null;
+      }
+    };
+  }, []);
+
+  const getNotificationById = async () => {
+    try {
+      const userId = await AsyncStorage.getItem('userId');
+      setUserId(userId);
+      const response = await axios.get(`https://immuneapi-production.up.railway.app/userNotification/getById?id=${Number(userId)}`);
+      if (response.status === 200) {
+        console.log('Notification data:', response.data);
+      } else {
+        console.error('Failed to fetch notifications');
+      }
+    } catch (error) {
+      console.error('An error occurred while fetching notifications:', error.message);
+    }
+  };
 
   const fetchBannerData = async () => {
     try {
@@ -53,6 +115,12 @@ export default function Home() {
   }
 
   useEffect(() => {
+    const getUserId = async () => {
+      const userId = await AsyncStorage.getItem('userId');
+      setUserId(userId);
+    };
+
+    getUserId();
     fetchBannerData();
     fetchTopRatedDoctors();
   }, []);

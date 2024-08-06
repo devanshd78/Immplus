@@ -1,13 +1,14 @@
 import { useNavigation, CommonActions } from '@react-navigation/native';
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TextInput, Image,Button, StyleSheet, Dimensions, Platform, TouchableOpacity, Alert, Keyboard, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, Image, Button, StyleSheet, Dimensions, Platform, TouchableOpacity, Alert, Keyboard, ActivityIndicator } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import GradientButton from './assets/component/GradientButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import * as Notifications from 'expo-notifications';
-import { schedulePushNotification, registerForPushNotificationsAsync } from './utils/notifications';
+import { schedulePushNotification, registerForPushNotificationsAsync } from './notification';
+import socket from './socket.js';
 
 //import styles from './style2';
 //import styles from './style';
@@ -17,11 +18,11 @@ const windowHeight = Dimensions.get('window').height;
 
 Notifications.setNotificationHandler({
     handleNotification: async () => ({
-      shouldShowAlert: true,
-      shouldPlaySound: false,
-      shouldSetBadge: false,
+        shouldShowAlert: true,
+        shouldPlaySound: false,
+        shouldSetBadge: false,
     }),
-  });
+});
 
 const styles = StyleSheet.create({
     container: {
@@ -133,6 +134,27 @@ export default function LoginComponent() {
     const [loading, setLoading] = useState(false);
     const [isKeyboardVisible, setKeyboardVisible] = useState(false);
 
+    useEffect(() => {
+        socket.on('connection', () => {
+            console.log('Socket connected');
+        });
+
+        socket.on('disconnect', () => {
+            console.log('Socket disconnected');
+        });
+
+        socket.on('error', (error) => {
+            console.error('Socket error:', error);
+        });
+
+        return () => {
+            socket.off('connection');
+            socket.off('disconnect');
+            socket.off('error');
+        };
+
+    }, []);
+
     const handleLoginPress = async () => {
         if (!phoneNumber && !password) {
             Alert.alert('Please enter both phone number and password.');
@@ -170,62 +192,62 @@ export default function LoginComponent() {
 
     const navigateNext = () => {
         navigation.dispatch(
-          CommonActions.reset({
-            index: 0,
-            routes: [{ name: "home" }],
-          })
+            CommonActions.reset({
+                index: 0,
+                routes: [{ name: "home" }],
+            })
         );
-      };
+    };
 
-      const [expoPushToken, setExpoPushToken] = useState('');
-      const [channels, setChannels] = useState([]);
-      const [notification, setNotification] = useState(
+    const [expoPushToken, setExpoPushToken] = useState('');
+    const [channels, setChannels] = useState([]);
+    const [notification, setNotification] = useState(
         undefined
-      );
-      const notificationListener = useRef();
-      const responseListener = useRef();
-    
-      useEffect(() => {
-        registerForPushNotificationsAsync().then(token => token && setExpoPushToken(token));
-    
-        if (Platform.OS === 'android') {
-          Notifications.getNotificationChannelsAsync().then(value => setChannels(value ?? []));
-        }
-        notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-          setNotification(notification);
-        });
-    
-        responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-          console.log(response);
-        });
-    
-        return () => {
-          notificationListener.current &&
-            Notifications.removeNotificationSubscription(notificationListener.current);
-          responseListener.current &&
-            Notifications.removeNotificationSubscription(responseListener.current);
-        };
-      }, []);
+    );
+    const notificationListener = useRef();
+    const responseListener = useRef();
 
     useEffect(() => {
-      const keyboardDidShowListener = Keyboard.addListener(
-        "keyboardDidShow",
-        () => {
-          setKeyboardVisible(true); // or set the component visibility to false
+        registerForPushNotificationsAsync().then(token => token && setExpoPushToken(token));
+
+        if (Platform.OS === 'android') {
+            Notifications.getNotificationChannelsAsync().then(value => setChannels(value ?? []));
         }
-      );
-      const keyboardDidHideListener = Keyboard.addListener(
-        "keyboardDidHide",
-        () => {
-          setKeyboardVisible(false); // or set the component visibility to true
-        }
-      );
-  
-      // Clean up the event listeners
-      return () => {
-        keyboardDidShowListener.remove();
-        keyboardDidHideListener.remove();
-      };
+        notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+            setNotification(notification);
+        });
+
+        responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+            console.log(response);
+        });
+
+        return () => {
+            notificationListener.current &&
+                Notifications.removeNotificationSubscription(notificationListener.current);
+            responseListener.current &&
+                Notifications.removeNotificationSubscription(responseListener.current);
+        };
+    }, []);
+
+    useEffect(() => {
+        const keyboardDidShowListener = Keyboard.addListener(
+            "keyboardDidShow",
+            () => {
+                setKeyboardVisible(true); // or set the component visibility to false
+            }
+        );
+        const keyboardDidHideListener = Keyboard.addListener(
+            "keyboardDidHide",
+            () => {
+                setKeyboardVisible(false); // or set the component visibility to true
+            }
+        );
+
+        // Clean up the event listeners
+        return () => {
+            keyboardDidShowListener.remove();
+            keyboardDidHideListener.remove();
+        };
     }, []);
 
     const handleSignUpPress = () => {
@@ -288,12 +310,12 @@ export default function LoginComponent() {
                     </TouchableOpacity>
                 </Text>
             </View>
-            <Button
-        title="Schedule Notification"
-        onPress={async () => {
-          await schedulePushNotification("dummy", "dummy",{ data: 'goes here', test: { test1: 'more data' } });
-        }}
-      />
+            {/* <Button
+                title="Schedule Notification"
+                onPress={async () => {
+                    await schedulePushNotification("dummy", "dummy", { data: 'goes here', test: { test1: 'more data' } });
+                }}
+            /> */}
             <View style={styles.buttonContainer}>
                 <GradientButton onPress={handleLoginPress} buttonText="Login" />
             </View>

@@ -29,6 +29,7 @@ export default function PharmaDesc() {
     const [refreshing, setRefreshing] = useState(false);
 
     const placeOrder = async () => {
+
         try {
             const response = await axios.post('https://immuneapi-production.up.railway.app/order/create', {
                 userId: UserId,
@@ -36,7 +37,7 @@ export default function PharmaDesc() {
                     {
                         productId: productDetails._id,
                         name: productDetails.name,
-                        price: productDetails.price,
+                        price: Number(productDetails.price),
                         pieces: selectedTab,
                         dose: selectedDoseTab,
                         quantity: quantity,
@@ -46,7 +47,7 @@ export default function PharmaDesc() {
             });
 
             if (response.status === 200) {
-                console.log('Order placed successfully');
+                console.log(response.data.orderId);
             } else {
                 console.error('Failed to place order');
             }
@@ -54,7 +55,6 @@ export default function PharmaDesc() {
             console.error('An error occurred while placing the order:', error.message);
         }
     };
-
 
     const fetchProducts = async () => {
         try {
@@ -102,7 +102,7 @@ export default function PharmaDesc() {
 
     useEffect(() => {
         const getUserId = async () => {
-            const userId = await AsyncStorage.getItem('UserId');
+            const userId = await AsyncStorage.getItem('userId');
             setUserId(userId);
         };
 

@@ -80,20 +80,20 @@ export default function Home() {
     };
   }, []);
 
-  const getNotificationById = async () => {
-    try {
-      const userId = await AsyncStorage.getItem('userId');
-      setUserId(userId);
-      const response = await axios.get(`https://immuneapi-production.up.railway.app/userNotification/getById?id=${Number(userId)}`);
-      if (response.status === 200) {
-        console.log('Notification data:', response.data);
-      } else {
-        console.error('Failed to fetch notifications');
-      }
-    } catch (error) {
-      console.error('An error occurred while fetching notifications:', error.message);
-    }
-  };
+  // const getNotificationById = async () => {
+  //   try {
+  //     const userId = await AsyncStorage.getItem('userId');
+  //     setUserId(userId);
+  //     const response = await axios.get(`https://immuneapi-production.up.railway.app/userNotification/getById?id=${Number(userId)}`);
+  //     if (response.status === 200) {
+  //       console.log('Notification data:', response.data);
+  //     } else {
+  //       console.error('Failed to fetch notifications');
+  //     }
+  //   } catch (error) {
+  //     console.error('An error occurred while fetching notifications:', error.message);
+  //   }
+  // };
 
   const fetchBannerData = async () => {
     try {

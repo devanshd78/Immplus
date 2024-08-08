@@ -9,7 +9,8 @@ import axios from 'axios';
 import * as Notifications from 'expo-notifications';
 import { schedulePushNotification, registerForPushNotificationsAsync } from './notification';
 import socket from './socket.js';
-
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 //import styles from './style2';
 //import styles from './style';
 
@@ -133,6 +134,7 @@ export default function LoginComponent() {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+    const recaptchaVerifier = useRef(null);
 
     useEffect(() => {
         socket.on('connection', () => {
@@ -154,6 +156,30 @@ export default function LoginComponent() {
         };
 
     }, []);
+
+    const [verificationCode, setVerificationCode] = useState('');
+    const [verificationId, setVerificationId] = useState(null);
+
+    const sendVerification = async () => {
+        try {
+          const phoneProvider = auth.PhoneAuthProvider();
+          const verificationId = await phoneProvider.verifyPhoneNumber(phoneNumber, recaptchaVerifier.current);
+          setVerificationId(verificationId);
+          Alert.alert('Verification code has been sent to your phone.');
+        } catch (error) {
+          Alert.alert('Error sending verification code:', error.message);
+        }
+      };
+    
+      const confirmCode = async () => {
+        try {
+          const credential = auth.PhoneAuthProvider.credential(verificationId, verificationCode);
+          await auth().signInWithCredential(credential);
+          Alert.alert('Phone authentication successful!');
+        } catch (error) {
+          Alert.alert('Error confirming code:', error.message);
+        }
+      };
 
     const handleLoginPress = async () => {
         if (!phoneNumber && !password) {
@@ -256,6 +282,10 @@ export default function LoginComponent() {
 
     return (
         <View style={styles.container}>
+                <FirebaseRecaptchaVerifierModal
+      ref={recaptchaVerifier}
+      firebaseConfig={firebaseConfig}
+    />
             <View style={{ flex: 0, marginTop: 100 }}>
                 <View style={styles.logoContainer}>
                     <Image
@@ -317,7 +347,7 @@ export default function LoginComponent() {
                 }}
             /> */}
             <View style={styles.buttonContainer}>
-                <GradientButton onPress={handleLoginPress} buttonText="Login" />
+                <GradientButton onPress={sendVerification} buttonText="Login" />
             </View>
         </View>
     );

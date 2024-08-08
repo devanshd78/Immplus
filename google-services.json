@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "634276459285",
+    "project_id": "immandroid-6b811",
+    "storage_bucket": "immandroid-6b811.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:634276459285:android:8c728cebf3e3d98abaef1c",
+        "android_client_info": {
+          "package_name": "com.risxbhh.immplus"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHUKL2BcrOjYCg9CfsSuKH2mMwRvFtchs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
